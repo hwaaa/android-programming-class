@@ -1,5 +1,6 @@
 package hwa.helloworld.listview_movie;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -49,6 +50,9 @@ public class MainActivity extends AppCompatActivity {
         // 3-1. 새로 만든 어댑터 등록하기
         ListViewAdapter listViewAdapter = new ListViewAdapter( arrayList, MainActivity.this, R.layout.listview_item_horizontal);
         lvItem.setAdapter(listViewAdapter);
+
+        /*InformationAdapter informationAdapter = new InformationAdapter( arrayList, MainActivity.this, R.layout.information);
+        lvItem.setAdapter(informationAdapter);*/
 
         // 4. 리스트 뷰에 OnItemClickListener 등록하기
         lvItem.setOnItemClickListener(new AdapterView.OnItemClickListener() {
