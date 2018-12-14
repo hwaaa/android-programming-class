@@ -12,6 +12,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
+import hwa.helloworld.listview_movie.form.InformationItem;
 import hwa.helloworld.listview_movie.form.ListViewItem;
 
 public class MainActivity extends AppCompatActivity {
@@ -51,8 +52,14 @@ public class MainActivity extends AppCompatActivity {
         ListViewAdapter listViewAdapter = new ListViewAdapter( arrayList, MainActivity.this, R.layout.listview_item_horizontal);
         lvItem.setAdapter(listViewAdapter);
 
-        /*InformationAdapter informationAdapter = new InformationAdapter( arrayList, MainActivity.this, R.layout.information);
-        lvItem.setAdapter(informationAdapter);*/
+        ArrayList<InformationItem> info_arrayList = new ArrayList<InformationItem>();
+        InformationAdapter InformationAdapter = new InformationAdapter( info_arrayList, MainActivity.this, R.layout.activity_information);
+
+        info_arrayList.add(new InformationItem("블랙펜서", "2018. 3", R.drawable.blackpanther));
+        info_arrayList.add(new InformationItem("궁합", "2018. 1", R.drawable.gh));
+        info_arrayList.add(new InformationItem("리틀포레스트", "2018. 11", R.drawable.littleforest));
+        info_arrayList.add(new InformationItem("월요일이사라졌다", "2018. 12", R.drawable.monday));
+        lvItem.setAdapter(InformationAdapter);
 
         // 4. 리스트 뷰에 OnItemClickListener 등록하기
         lvItem.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -61,6 +68,8 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(MainActivity.this, i + " 선택함", Toast.LENGTH_SHORT).show();
                 }
             });
+
+
 
     }
 }

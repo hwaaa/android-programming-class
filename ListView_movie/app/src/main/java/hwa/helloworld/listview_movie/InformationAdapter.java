@@ -14,26 +14,26 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-import hwa.helloworld.listview_movie.form.ListViewItem;
+import hwa.helloworld.listview_movie.form.InformationItem;
 
 /**
  * Created by student on 2018-12-14.
  */
 
 public class InformationAdapter extends BaseAdapter {
-    ArrayList<ListViewItem> list;   // 자료를 저장하고 있는 ArrayList
+    ArrayList<InformationItem> list;   // 자료를 저장하고 있는 ArrayList
     Context context;
     int item_layout;
     LayoutInflater layoutInflater;
 
-    public InformationAdapter(ArrayList<ListViewItem> list, Context context, int item_layout) {
+    public InformationAdapter(ArrayList<InformationItem> list, Context context, int item_layout) {
         this.list = list;
         this.context = context;
         this.item_layout = item_layout;
         layoutInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
-    public InformationAdapter(ArrayList<ListViewItem> list) {
+    public InformationAdapter(ArrayList<InformationItem> list) {
         this.list = list;
     }
 
@@ -62,18 +62,18 @@ public class InformationAdapter extends BaseAdapter {
 
 
         ImageView iv_thumb = (ImageView) view.findViewById(R.id.iv_poster);
-        iv_thumb.setImageResource(list.get(pos).getImg_id());
+        iv_thumb.setImageResource(list.get(pos).getInfo_img_id());
         iv_thumb.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                Toast.makeText(context, list.get(pos).getTitle()+"을(를) 선택했습니다.", Toast.LENGTH_LONG).show();
+                //Toast.makeText(context, list.get(pos).getTitle()+"을(를) 선택했습니다.", Toast.LENGTH_LONG).show();
 
                 Intent intent = new Intent(context, MainActivity.class);
                 intent.putExtra("movie_index", pos);
-                intent.putExtra("movie_title", list.get(pos).getTitle());
-                intent.putExtra("movie_date", list.get(pos).getDate());
-                intent.putExtra("movie_img_id", list.get(pos).getImg_id());
+                intent.putExtra("movie_title", list.get(pos).getInfo_title());
+                intent.putExtra("movie_date", list.get(pos).getInfo_date());
+                intent.putExtra("movie_img_id", list.get(pos).getInfo_img_id());
                 context.startActivity(intent);
             }
         });
@@ -84,7 +84,7 @@ public class InformationAdapter extends BaseAdapter {
 
 
         // 1/inSampleSize 비율로 리사이징
-        Bitmap thumb_resize = BitmapFactory.decodeResource(view.getResources(), list.get(pos).getImg_id(), options);
+        Bitmap thumb_resize = BitmapFactory.decodeResource(view.getResources(), list.get(pos).getInfo_img_id(), options);
         iv_thumb.setImageBitmap(thumb_resize);
 
 
@@ -94,29 +94,29 @@ public class InformationAdapter extends BaseAdapter {
         TextView tv_title = (TextView) view.findViewById(R.id.tv_moviename);
         TextView tv_date = (TextView) view.findViewById(R.id.tv_moviedate);
 
-        tv_title.setText(list.get(pos).getTitle());
-        tv_date.setText(list.get(pos).getDate());
+        tv_title.setText(list.get(pos).getInfo_title());
+        tv_date.setText(list.get(pos).getInfo_date());
 
         if(pos < list.size()) {
-            iv_thumb.setImageResource(list.get(pos).getImg_id());
+            iv_thumb.setImageResource(list.get(pos).getInfo_img_id());
             iv_thumb.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Toast.makeText(context,
-                            list.get(pos).getTitle()+"를(을) 선택했습니다.",
+                            list.get(pos).getInfo_title()+"를(을) 선택했습니다.",
                             Toast.LENGTH_SHORT).show();
 
                     Intent intent = new Intent(context, MainActivity.class);
                     intent.putExtra("movie_index", pos);
-                    intent.putExtra("movie_title", list.get(pos).getTitle());
-                    intent.putExtra("movie_date", list.get(pos).getDate());
-                    intent.putExtra("movie_img_id", list.get(pos).getImg_id());
+                    intent.putExtra("movie_title", list.get(pos).getInfo_title());
+                    intent.putExtra("movie_date", list.get(pos).getInfo_date());
+                    intent.putExtra("movie_img_id", list.get(pos).getInfo_img_id());
                     context.startActivity(intent);
                 }
             });
 
-            tv_title.setText(list.get(pos).getTitle());
-            tv_date.setText(list.get(pos).getDate());
+            tv_title.setText(list.get(pos).getInfo_title());
+            tv_date.setText(list.get(pos).getInfo_date());
         } else {
             iv_thumb.setVisibility(View.GONE);
             tv_title.setVisibility(View.GONE);
