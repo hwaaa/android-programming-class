@@ -20,7 +20,7 @@ public class MoveActivity extends AppCompatActivity {
     TextView tv_show;
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_move);
         tv_show = (TextView)findViewById(R.id.tv_show);
