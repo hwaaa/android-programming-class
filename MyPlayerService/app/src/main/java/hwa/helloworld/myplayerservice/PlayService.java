@@ -6,10 +6,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.media.MediaPlayer;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.IBinder;
+import android.os.SystemClock;
 import android.support.annotation.RequiresApi;
 import android.util.Log;
+import android.view.View;
 
 public class PlayService extends Service {
     MediaPlayer player;     // mp3파일을 재생하는 MediaPlayer 객체 변수
@@ -120,5 +123,22 @@ public class PlayService extends Service {
     @Override
     public IBinder onBind(Intent intent) {
         return null;
+    }
+
+    class MyTask extends AsyncTask<Void, Void, Void> {
+        Intent intent = new Intent("hwa.myplayerservice");
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            while(isCancelled() == false) {
+                SystemClock.sleep(500);
+            }
+            return null;
+        }
+
+        protected void onCancelled() {
+            //tv_start_music.setText("");
+            //pb_bar.setVisibility(View.INVISIBLE);
+        }
     }
 }
