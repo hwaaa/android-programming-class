@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Adapter 에게 전달할 데이터 구성하기
         ListViewItem item = new ListViewItem("블랙펜서", "2018. 3", R.drawable.blackpanther);
+
         ArrayList<ListViewItem> arrayList = new ArrayList<ListViewItem>();
         arrayList.add(item);
         arrayList.add(new ListViewItem("궁합", "2018. 1", R.drawable.gh));
