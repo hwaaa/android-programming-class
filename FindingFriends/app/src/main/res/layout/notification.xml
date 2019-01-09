@@ -5,25 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageButton
-        android:id="@+id/img_direction"
-        android:layout_width="500px"
-        android:layout_height="500px"
+    <Button
+        android:id="@+id/btn_vib"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="진동"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/btn_back"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="back"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/img_direction"
-        app:layout_constraintVertical_bias="0.548" />
-
 </android.support.constraint.ConstraintLayout>

@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">FindingFriends</string>
     <string name="direction_name">친구 방향 알아보기</string>
+    <string name="sharing_name">위치 서로 공유하기</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
