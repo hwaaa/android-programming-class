@@ -6,11 +6,11 @@
         android:protectionLevel="signature"/>
     <uses-permission android:name="hwa.helloworld.findingfriends.permission.MAPS_RECEIVER"/>
     <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <!-- 현재 위치를 가져오기 위한 권한 2개
     * 1. 대략적인 위치 (gps 기반)
     * 2. 정확한 위치 (gps + 네트워크 기반) -->
-
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
 
@@ -60,6 +60,18 @@
         <activity android:name=".NotiActivity"
             android:label=""
             android:theme="@style/Theme.AppCompat.Dialog">
+
+        </activity>
+
+        <activity android:name=".BearingActivity"
+            android:label=" "
+            android:theme="@style/AppTheme.NoActionBar">
+
+        </activity>
+
+        <activity android:name=".GeoActivity"
+            android:label=" "
+            android:theme="@style/AppTheme.NoActionBar">
 
         </activity>
 
