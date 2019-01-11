@@ -56,6 +56,7 @@ public class MainActivity extends AppCompatActivity
     LocationListener locationListener;
     String selected_provider;
     TextView tv_dis, tv_cnt;
+    int cnt = 0;
 
     // 상수를 통해 띄운 액티비티를 구분
     public static final int REQUEST_CODE_ANOTHER = 1001;
@@ -66,6 +67,7 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
 
         tv_dis = (TextView)findViewById(R.id.tv_dis);
+        tv_cnt = (TextView)findViewById(R.id.tv_cnt);
         locationManager = (LocationManager)getSystemService(LOCATION_SERVICE);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -252,12 +254,14 @@ public class MainActivity extends AppCompatActivity
                     vib.vibrate(500);  // 0.5초 동안 진동
 
                     Toast.makeText(MainActivity.this, "친구가 근처에 있습니다.", Toast.LENGTH_LONG).show();
+                    cnt++;  // 횟수 카운트
                 } else {
                     Toast.makeText(MainActivity.this, "10 이상", Toast.LENGTH_LONG).show();
                 }
 
                 String dis = Double.toString(distance(location.getLatitude(), location.getLongitude(), latLng.latitude, latLng.longitude));
                 tv_dis.setText(dis);
+                tv_cnt.setText(Integer.toString(cnt));
             }
         });
     }

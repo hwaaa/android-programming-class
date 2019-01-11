@@ -16,6 +16,7 @@ import android.os.Message;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -39,7 +40,7 @@ import static hwa.helloworld.findingfriends.MainActivity.REQUEST_CODE_ANOTHER;
  */
 
 public class GeoActivity extends AppCompatActivity implements OnMapReadyCallback {
-
+    final int GEO_MESSAGE = 1000;
     final int REV_GEO_MESSAGE = 1001;
 
     LocationManager locationManager;
@@ -85,7 +86,7 @@ public class GeoActivity extends AppCompatActivity implements OnMapReadyCallback
         }
 
 
-        final LatLng NOW = new LatLng(location.getLatitude(), location.getLongitude());
+       // final LatLng NOW = new LatLng(location.getLatitude(), location.getLongitude());
 
         locationListener = new LocationListener() {
             @Override
@@ -115,7 +116,7 @@ public class GeoActivity extends AppCompatActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.geo_map);
         mapFragment.getMapAsync(this);
 
-        /*btn_geo.setOnClickListener(new View.OnClickListener() {
+        btn_geo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -123,15 +124,15 @@ public class GeoActivity extends AppCompatActivity implements OnMapReadyCallback
                         et_addr.getText().toString());
                 geoThread.start();
             }
-        });*/
+        });
 
         btn_revGeo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                LatLng latLng1 = new LatLng(
-                        Double.valueOf(et_lng.getText().toString()),
-                        Double.valueOf(et_lat.getText().toString()));
-                RevGeoThread revGeoThread = new RevGeoThread(latLng1);
+                LatLng latLng = new LatLng(
+                        Double.valueOf(et_lat.getText().toString()),
+                        Double.valueOf(et_lng.getText().toString()));
+                RevGeoThread revGeoThread = new RevGeoThread(latLng);
                 revGeoThread.start();
             }
         });
@@ -183,9 +184,6 @@ public class GeoActivity extends AppCompatActivity implements OnMapReadyCallback
                 map.addMarker(markerOptions);
 
                 location_list.add(new LocationVO(latLng.latitude, latLng.longitude, "위치", "주소"));
-                //Toast.makeText(SharingActivity.this, "lat " + location_list.get(i).getLat() + " / lng " + location_list.get(i).getLng(), Toast.LENGTH_SHORT).show();
-
-                //tv_result.setText(latLng.latitude + " / " + latLng.longitude);
 
                 String lat = Double.toString(latLng.latitude);
                 String lng = Double.toString(latLng.longitude);
@@ -200,7 +198,7 @@ public class GeoActivity extends AppCompatActivity implements OnMapReadyCallback
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            switch(msg.what) {/*
+            switch(msg.what) {
                 case GEO_MESSAGE:
                     LatLng latLng = (LatLng)msg.obj;
                     tv_result.setText("위도 : " + latLng.latitude + " 경도 : " + latLng.longitude);
@@ -214,9 +212,9 @@ public class GeoActivity extends AppCompatActivity implements OnMapReadyCallback
                     markerOptions.title("선택된 장소");
                     markerOptions.snippet(et_addr.getText().toString());
                     googleMap.addMarker(markerOptions);
-                    break;*/
+                    break;
                 case REV_GEO_MESSAGE:
-                   // googleMap.clear();
+                   googleMap.clear();
 
                     Address addr = (Address)msg.obj;
                     tv_result.setText("주소 : " + addr.getAddressLine(0));
@@ -226,11 +224,11 @@ public class GeoActivity extends AppCompatActivity implements OnMapReadyCallback
                     googleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng1));
                     googleMap.animateCamera(CameraUpdateFactory.zoomTo(13));
 
-                    /*MarkerOptions markerOptions1 = new MarkerOptions();
+                    MarkerOptions markerOptions1 = new MarkerOptions();
                     markerOptions1.position(latLng1);
                     markerOptions1.title("선택된 장소");
                     markerOptions1.snippet(addr.getAddressLine(0));
-                    googleMap.addMarker(markerOptions1);*/
+                    googleMap.addMarker(markerOptions1);
                     break;
             }
         }
@@ -258,7 +256,7 @@ public class GeoActivity extends AppCompatActivity implements OnMapReadyCallback
                     msg.what = REV_GEO_MESSAGE;
                     geoHandler.sendMessage(msg);
                 } else {
-
+                    Log.d("결과","검색 결과가 없습니다.");
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -266,7 +264,7 @@ public class GeoActivity extends AppCompatActivity implements OnMapReadyCallback
         }
     }
 
-    /*class GeoThread extends Thread {
+    class GeoThread extends Thread {
         String address;
 
         public GeoThread(String address) {
@@ -295,5 +293,5 @@ public class GeoActivity extends AppCompatActivity implements OnMapReadyCallback
                 e.printStackTrace();
             }
         }
-    }*/
+    }
 }

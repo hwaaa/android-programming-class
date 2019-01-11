@@ -104,21 +104,6 @@ public class LocationNow extends AppCompatActivity implements OnMapReadyCallback
             }
         };
 
-        /*if(ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION )
-                == PackageManager.PERMISSION_GRANTED) {
-            Location location = locationManager.getLastKnownLocation(selected_provider);
-            if(location != null) {
-                tv_lat.setText("위도 : " + String.valueOf(location.getLatitude()));
-                tv_lng.setText("경도 : " + String.valueOf(location.getLongitude()));
-
-            }
-            locationManager.requestLocationUpdates(selected_provider, 10000, 10, locationListener);
-        } else {
-            ActivityCompat.requestPermissions(
-                    this, new String[] { Manifest.permission.ACCESS_FINE_LOCATION }, 200);
-            Toast.makeText(LocationNow.this, "권한을 허용한 후 재시작 해주세요.", Toast.LENGTH_SHORT).show();
-        }*/
-
         btn_back2 = (Button) findViewById(R.id.btn_back2);
         btn_back2.setOnClickListener(new View.OnClickListener() {
             @Override

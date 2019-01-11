@@ -49,6 +49,9 @@ public class SharingActivity extends Activity implements OnMapReadyCallback {
     Button btn_back1, btn_write;
     Location location;
     TextView tv_addr;
+    GoogleMap googleMap;
+
+    final int REV_GEO_MESSAGE = 1001;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -126,7 +129,8 @@ public class SharingActivity extends Activity implements OnMapReadyCallback {
 
 
     @Override
-    public void onMapReady(final GoogleMap googleMap) {
+    public void onMapReady(final GoogleMap map) {
+        this.googleMap = map;
         if(ContextCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION )
                 == PackageManager.PERMISSION_GRANTED) {
             Location location = locationManager.getLastKnownLocation(selected_provider);
@@ -142,11 +146,11 @@ public class SharingActivity extends Activity implements OnMapReadyCallback {
 
         Location location = locationManager.getLastKnownLocation(selected_provider);
         final LatLng NOW = new LatLng(location.getLatitude(), location.getLongitude());
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(NOW));
-        googleMap.animateCamera(CameraUpdateFactory.zoomTo(10));
-        googleMap.addMarker(new MarkerOptions().position(NOW));
+        map.moveCamera(CameraUpdateFactory.newLatLng(NOW));
+        map.animateCamera(CameraUpdateFactory.zoomTo(10));
+        map.addMarker(new MarkerOptions().position(NOW));
 
-        googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+        map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
 
             @Override
             public void onMapClick(final LatLng latLng) {
@@ -161,23 +165,93 @@ public class SharingActivity extends Activity implements OnMapReadyCallback {
                 //Toast.makeText(SharingActivity.this, "lat " + location_list.get(i).getLat() + " / lng " + location_list.get(i).getLng(), Toast.LENGTH_SHORT).show();
 
 
-                btn_back1.setVisibility(View.VISIBLE);
-                btn_write.setVisibility(View.VISIBLE);
-
-                tv_addr.setText(latLng.latitude + " / " + latLng.longitude);
+                final Double lat = latLng.latitude;
+                final Double lng = latLng.longitude;
 
                 btn_write.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+
+
+                        LatLng latLng = new LatLng(
+                                Double.valueOf(lat),
+                                Double.valueOf(lng));
+                        SharingActivity.RevGeoThread revGeoThread = new SharingActivity.RevGeoThread(latLng);
+                        revGeoThread.start();
+
+                        Intent intent = new Intent(SharingActivity.this, DetailActivity.class);
+                        intent.putExtra("now_lat", lat);
+                        intent.putExtra("now_lng", lng);
+                        //setResult(1, intent);
+                        //finish();
+
                         // 메모작성 인텐트 띄우기
-                        Intent intent = new Intent(getApplicationContext(), DetailActivity.class);
-                        intent.putExtra("now_latlng", latLng.latitude + " / " + latLng.longitude);
+                        //Intent intent = new Intent(getApplicationContext(), DetailActivity.class);
+                        /*intent.putExtra("now_lat", latLng.latitude);
+                        intent.putExtra("now_lng", latLng.longitude);*/
                         startActivityForResult(intent, REQUEST_CODE_ANOTHER);
+                        finish();
 
                     }
                 });
             }
         });
+    }
+
+    Handler geoHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch(msg.what) {
+                case REV_GEO_MESSAGE:
+                    googleMap.clear();
+
+                    Address addr = (Address)msg.obj;
+                    tv_addr.setText("주소 : " + addr.getAddressLine(0));
+                    /*LatLng latLng1 = new LatLng(
+                            Double.valueOf(et_lng.getText().toString()),
+                            Double.valueOf(et_lat.getText().toString()));
+                    googleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng1));
+                    googleMap.animateCamera(CameraUpdateFactory.zoomTo(13));*/
+
+                    /*MarkerOptions markerOptions1 = new MarkerOptions();
+                    markerOptions1.position(latLng1);
+                    markerOptions1.title("선택된 장소");
+                    markerOptions1.snippet(addr.getAddressLine(0));
+                    googleMap.addMarker(markerOptions1);*/
+                    break;
+            }
+        }
+    };
+
+    class RevGeoThread extends Thread {
+        LatLng latLng;
+
+        public RevGeoThread(LatLng latLng) {
+            this.latLng = latLng;
+        }
+
+        @Override
+        public void run() {
+            Geocoder geocoder = new Geocoder(SharingActivity.this);
+            List<Address> addr = null;
+
+            try {
+                addr = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
+                if(addr != null && addr.size() > 0) {
+                    Address pin = addr.get(0);
+
+                    Message msg = new Message();
+                    msg.obj = pin;
+                    msg.what = REV_GEO_MESSAGE;
+                    geoHandler.sendMessage(msg);
+                } else {
+                    Log.d("결과","검색 결과가 없습니다.");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
 
