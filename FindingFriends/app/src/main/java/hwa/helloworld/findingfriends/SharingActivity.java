@@ -301,7 +301,7 @@ public class SharingActivity extends Activity implements OnMapReadyCallback {
                 bytes = msg.getBytes("UTF-8");
                 os.write(bytes);
                 os.flush();
-                System.out.println("[데이터 보내기 성공]");
+                System.out.println("[데이터 보내기 성공!]");
 
                 InputStream is = socket.getInputStream();
                 bytes = new byte[100];

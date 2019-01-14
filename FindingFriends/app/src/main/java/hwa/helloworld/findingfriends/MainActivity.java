@@ -260,7 +260,7 @@ public class MainActivity extends AppCompatActivity
                 if(distance(location.getLatitude(), location.getLongitude(), latLng.latitude, latLng.longitude) < 10) {
                     // 거리 위치 진동....
                     Vibrator vib = (Vibrator)getSystemService(VIBRATOR_SERVICE);
-                    vib.vibrate(500);  // 0.5초 동안 진동
+                    vib.vibrate(500);  // 0.5초 동안 진동!
 
                     Toast.makeText(MainActivity.this, "친구가 근처에 있습니다.", Toast.LENGTH_LONG).show();
                     cnt++;  // 횟수 카운트
