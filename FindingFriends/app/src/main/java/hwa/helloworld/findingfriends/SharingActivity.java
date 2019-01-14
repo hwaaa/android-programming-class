@@ -1,6 +1,7 @@
 package hwa.helloworld.findingfriends;
 
 import android.*;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.content.Intent;
@@ -32,6 +33,11 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.InetSocketAddress;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,6 +56,7 @@ public class SharingActivity extends Activity implements OnMapReadyCallback {
     Location location;
     TextView tv_addr;
     GoogleMap googleMap;
+    LatLng latLng;
 
     final int REV_GEO_MESSAGE = 1001;
 
@@ -57,6 +64,9 @@ public class SharingActivity extends Activity implements OnMapReadyCallback {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sharing_location);
+
+        Thread thread = new client_thread();
+        thread.start();
 
         tv_addr = (TextView)findViewById(R.id.tv_addr);
         locationManager = (LocationManager)getSystemService(LOCATION_SERVICE);
@@ -172,7 +182,6 @@ public class SharingActivity extends Activity implements OnMapReadyCallback {
                     @Override
                     public void onClick(View v) {
 
-
                         LatLng latLng = new LatLng(
                                 Double.valueOf(lat),
                                 Double.valueOf(lng));
@@ -208,6 +217,7 @@ public class SharingActivity extends Activity implements OnMapReadyCallback {
 
                     Address addr = (Address)msg.obj;
                     tv_addr.setText("주소 : " + addr.getAddressLine(0));
+                    final String now_addr = addr.getAddressLine(0);
                     /*LatLng latLng1 = new LatLng(
                             Double.valueOf(et_lng.getText().toString()),
                             Double.valueOf(et_lat.getText().toString()));
@@ -260,4 +270,82 @@ public class SharingActivity extends Activity implements OnMapReadyCallback {
         super.onDestroy();
         locationManager.removeUpdates(locationListener);
     }
+
+
+    public class client_thread extends Thread {
+        @Override
+        public void run() {
+            Socket socket = null;
+            try {
+                socket = new Socket();
+                System.out.println("[연결 요청]");
+                socket.connect(new InetSocketAddress("70.12.110.68", 5001));
+                System.out.println("[연결 성공]");
+
+                // 데이터 보내고 받기
+                byte[] bytes = null;
+                String msg = null;
+                String now_lat = null;
+
+                @SuppressLint("MissingPermission")
+                Location location = locationManager.getLastKnownLocation(selected_provider);
+
+                OutputStream os = socket.getOutputStream();
+                //msg = "Hello Server";
+
+                msg = Double.toString(location.getLatitude()) + " / " + Double.toString(location.getLongitude());
+
+                //bytes = msg.getBytes("UTF-8");
+                bytes = msg.getBytes("UTF-8");
+                os.write(bytes);
+                os.flush();
+                System.out.println("[데이터 보내기 성공]");
+
+                InputStream is = socket.getInputStream();
+                bytes = new byte[100];
+                int readByteCount = is.read(bytes);
+                /*msg = new String(bytes, 0, readByteCount, "UTF-8");
+                System.out.println("[데이터 받기 성공]: " + msg);*/
+
+                now_lat = new String(bytes, 0, readByteCount, "UTF-8");
+                System.out.println("[데이터 받기 성공]: " + now_lat);
+
+
+                String[] latlng = now_lat.split("/");
+                final LatLng loc = new LatLng(Double.parseDouble(latlng[0]), Double.parseDouble(latlng[1]));
+
+                // loc를 message로 핸들러에 전달하기 (서버에 있는 위치 받아서 마커찍기)
+                Message msg1 = new Message();
+                msg1.what = 1;
+                msg1.obj = loc;
+                handler.sendMessage(msg1);
+
+                os.close();
+                is.close();
+
+            } catch (Exception e) {
+                Log.d("결과 ", "서버 연결 실패");
+            }
+
+            if(!socket.isClosed()) {
+                try {
+                    socket.close();
+                } catch (IOException e1) {
+                    Log.d("결과 ", "소켓 닫기 실패");
+                }
+            }
+        }
+    };
+
+    Handler handler = new Handler() {
+        public void handleMessage(Message msg1) {
+            super.handleMessage(msg1);
+            if(msg1.what == 1) {
+                googleMap.addMarker(new MarkerOptions().position((LatLng)msg1.obj));
+            }
+        }
+    };
+
+
+
 }

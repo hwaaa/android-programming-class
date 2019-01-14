@@ -228,8 +228,8 @@ public class MainActivity extends AppCompatActivity
         Log.d("위치1 ", lat1 + " / " + lng1);
 
         googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-            @Override
-            public void onMapClick(final LatLng latLng) {
+                    @Override
+                    public void onMapClick(final LatLng latLng) {
                 /*if(ContextCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION )
                         == PackageManager.PERMISSION_GRANTED) {
                     Location location = locationManager.getLastKnownLocation(selected_provider);
