@@ -180,7 +180,7 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_direction) {
             // Handle the camera action
-            Intent intent = new Intent(getApplicationContext(), FriendsDirection.class);
+            Intent intent = new Intent(getApplicationContext(), BearingActivity.class);
             startActivityForResult(intent, REQUEST_CODE_ANOTHER); //두 번째 파라미터로 띄울 액티비티 구분
         } else if (id == R.id.nav_recom) {
             Intent intent = new Intent(getBaseContext(), SharingActivity.class);
@@ -204,7 +204,8 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onMapReady(final GoogleMap googleMap) {
-        if(ContextCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION )
+        if(ContextCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
             Location location = locationManager.getLastKnownLocation(selected_provider);
             if(location != null) {
@@ -213,20 +214,28 @@ public class MainActivity extends AppCompatActivity
             locationManager.requestLocationUpdates(selected_provider, 5000, 10, locationListener);
         } else {
             ActivityCompat.requestPermissions(
-                    this, new String[] { android.Manifest.permission.ACCESS_FINE_LOCATION }, 200);
+                    this, new String[] { android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION }, 200);
             Toast.makeText(MainActivity.this, "권한을 허용한 후 재시작 해주세요.", Toast.LENGTH_SHORT).show();
         }
 
         final Location location = locationManager.getLastKnownLocation(selected_provider);
-        final LatLng NOW = new LatLng(location.getLatitude(), location.getLongitude());
+        if(location == null) {
+
+        } else {
+            final LatLng NOW = new LatLng(location.getLatitude(), location.getLongitude());
+            googleMap.moveCamera(CameraUpdateFactory.newLatLng(NOW));
+            googleMap.animateCamera(CameraUpdateFactory.zoomTo(16));
+            googleMap.addMarker(new MarkerOptions().position(NOW));
+        }
+        /*final LatLng NOW = new LatLng(location.getLatitude(), location.getLongitude());
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(NOW));
         googleMap.animateCamera(CameraUpdateFactory.zoomTo(16));
-        googleMap.addMarker(new MarkerOptions().position(NOW));
+        googleMap.addMarker(new MarkerOptions().position(NOW));*/
 
-        String lat1 = Double.toString(location.getLatitude());
+        /*String lat1 = Double.toString(location.getLatitude());
         String lng1 = Double.toString(location.getLongitude());
         Log.d("위치1 ", lat1 + " / " + lng1);
-
+*/
         googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
                     @Override
                     public void onMapClick(final LatLng latLng) {

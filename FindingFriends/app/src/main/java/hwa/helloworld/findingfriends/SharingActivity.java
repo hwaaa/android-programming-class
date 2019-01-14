@@ -60,6 +60,7 @@ public class SharingActivity extends Activity implements OnMapReadyCallback {
 
     final int REV_GEO_MESSAGE = 1001;
 
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -273,6 +274,7 @@ public class SharingActivity extends Activity implements OnMapReadyCallback {
 
 
     public class client_thread extends Thread {
+
         @Override
         public void run() {
             Socket socket = null;
@@ -293,7 +295,7 @@ public class SharingActivity extends Activity implements OnMapReadyCallback {
                 OutputStream os = socket.getOutputStream();
                 //msg = "Hello Server";
 
-                msg = Double.toString(location.getLatitude()) + " / " + Double.toString(location.getLongitude());
+                msg = Double.toString(location.getLatitude()) + "/" + Double.toString(location.getLongitude());
 
                 //bytes = msg.getBytes("UTF-8");
                 bytes = msg.getBytes("UTF-8");
