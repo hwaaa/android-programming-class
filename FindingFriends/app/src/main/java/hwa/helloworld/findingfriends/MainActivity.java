@@ -181,13 +181,13 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.nav_direction) {
             // Handle the camera action
             Intent intent = new Intent(getApplicationContext(), BearingActivity.class);
-            startActivityForResult(intent, REQUEST_CODE_ANOTHER); //두 번째 파라미터로 띄울 액티비티 구분
+            startActivityForResult(intent, REQUEST_CODE_ANOTHER);
         } else if (id == R.id.nav_recom) {
             Intent intent = new Intent(getBaseContext(), SharingActivity.class);
-            startActivityForResult(intent, REQUEST_CODE_ANOTHER); //두 번째 파라미터로 띄울 액티비티 구분
+            startActivityForResult(intent, REQUEST_CODE_ANOTHER);
         } else if (id == R.id.nav_slideshow) {
             Intent intent = new Intent(getBaseContext(), GeoActivity.class);
-            startActivityForResult(intent, REQUEST_CODE_ANOTHER); //두 번째 파라미터로 띄울 액티비티 구분
+            startActivityForResult(intent, REQUEST_CODE_ANOTHER);
         } else if (id == R.id.nav_manage) {
             Intent intent = new Intent(getBaseContext(), BearingActivity.class);
             startActivityForResult(intent, REQUEST_CODE_ANOTHER);
@@ -320,13 +320,13 @@ public class MainActivity extends AppCompatActivity
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
         if(requestCode == REQUEST_CODE_ANOTHER) {
-            Toast toast = Toast.makeText(getBaseContext(), "onActivityResult() 메소드 호출됨.", Toast.LENGTH_LONG);
-            toast.show();
+            //Toast toast = Toast.makeText(getBaseContext(), "onActivityResult() 메소드 호출됨.", Toast.LENGTH_LONG);
+            //toast.show();
 
             if(resultCode == RESULT_OK) {
                 //String name = intent.getExtras().getString("name");
-                toast = Toast.makeText(getBaseContext(), "OK", Toast.LENGTH_LONG);
-                toast.show();
+                //toast = Toast.makeText(getBaseContext(), "OK", Toast.LENGTH_LONG);
+                //toast.show();
             }
         }
     }

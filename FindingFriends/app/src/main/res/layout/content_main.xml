@@ -40,8 +40,11 @@
         android:layout_width="138dp"
         android:layout_height="40dp"
         android:text="친구찾기"
-        tools:layout_editor_absoluteX="238dp"
-        tools:layout_editor_absoluteY="463dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/guideline9"
+        app:layout_constraintTop_toBottomOf="@+id/guideline6" />
 
     <TextView
         android:id="@+id/textView2"

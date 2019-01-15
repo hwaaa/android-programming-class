@@ -73,7 +73,7 @@ public class BearingActivity extends AppCompatActivity implements OnMapReadyCall
         }
 
 
-        final LatLng NOW = new LatLng(location.getLatitude(), location.getLongitude());
+        //final LatLng NOW = new LatLng(location.getLatitude(), location.getLongitude());
 
 
         et_lat1 = (EditText)findViewById(R.id.et_lat1);
@@ -83,10 +83,10 @@ public class BearingActivity extends AppCompatActivity implements OnMapReadyCall
         btn_go = (Button)findViewById(R.id.btn_go);
         iv_img = (ImageView)findViewById(R.id.iv_img);
 
-        String nowlat = Double.toString(location.getLatitude());
+        /*String nowlat = Double.toString(location.getLatitude());
         String nowlng = Double.toString(location.getLongitude());
         et_lat1.setText(nowlat);
-        et_lon1.setText(nowlng);
+        et_lon1.setText(nowlng);*/
 
         btn_go.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -98,9 +98,11 @@ public class BearingActivity extends AppCompatActivity implements OnMapReadyCall
 
                 short result = bearingP1toP2(lat1, lon1, lat2, lon2);
 
-                Toast.makeText(BearingActivity.this, "result : " + result, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(BearingActivity.this, "result : " + result, Toast.LENGTH_SHORT).show();
 
+                iv_img.setVisibility(View.VISIBLE);
                 iv_img.setRotation((float)result);
+
             }
         });
 
@@ -189,10 +191,25 @@ public class BearingActivity extends AppCompatActivity implements OnMapReadyCall
         }
 
         final Location location = locationManager.getLastKnownLocation(selected_provider);
-        final LatLng NOW = new LatLng(location.getLatitude(), location.getLongitude());
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(NOW));
-        googleMap.animateCamera(CameraUpdateFactory.zoomTo(16));
-        googleMap.addMarker(new MarkerOptions().position(NOW));
+        if(location == null) {
+
+            final LatLng NOW = new LatLng(37.45811060, 126.96140851);
+            googleMap.moveCamera(CameraUpdateFactory.newLatLng(NOW));
+            googleMap.animateCamera(CameraUpdateFactory.zoomTo(10));
+            googleMap.addMarker(new MarkerOptions().position(NOW));
+
+            String nowlat = Double.toString(37.45811060);
+            String nowlng = Double.toString(126.96140851);
+
+            et_lat1.setText(nowlat);
+            et_lon1.setText(nowlng);
+
+        } else {
+            final LatLng NOW = new LatLng(location.getLatitude(), location.getLongitude());
+            googleMap.moveCamera(CameraUpdateFactory.newLatLng(NOW));
+            googleMap.animateCamera(CameraUpdateFactory.zoomTo(16));
+            googleMap.addMarker(new MarkerOptions().position(NOW));
+        }
 
         /*String nowlat1 = Double.toString(location.getLatitude());
         String nowlng1 = Double.toString(location.getLongitude());

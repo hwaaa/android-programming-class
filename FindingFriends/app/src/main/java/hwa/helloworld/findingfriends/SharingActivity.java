@@ -92,7 +92,7 @@ public class SharingActivity extends Activity implements OnMapReadyCallback {
         }
 
 
-        final LatLng NOW = new LatLng(location.getLatitude(), location.getLongitude());
+        //final LatLng NOW = new LatLng(location.getLatitude(), location.getLongitude());
 
 
 
@@ -155,11 +155,21 @@ public class SharingActivity extends Activity implements OnMapReadyCallback {
             Toast.makeText(SharingActivity.this, "권한을 허용한 후 재시작 해주세요.", Toast.LENGTH_SHORT).show();
         }
 
-        Location location = locationManager.getLastKnownLocation(selected_provider);
-        final LatLng NOW = new LatLng(location.getLatitude(), location.getLongitude());
+        final Location location = locationManager.getLastKnownLocation(selected_provider);
+        if(location == null) {
+
+        } else {
+            final LatLng NOW = new LatLng(location.getLatitude(), location.getLongitude());
+            googleMap.moveCamera(CameraUpdateFactory.newLatLng(NOW));
+            googleMap.animateCamera(CameraUpdateFactory.zoomTo(10));
+            googleMap.addMarker(new MarkerOptions().position(NOW));
+        }
+
+
+       /* final LatLng NOW = new LatLng(location.getLatitude(), location.getLongitude());
         map.moveCamera(CameraUpdateFactory.newLatLng(NOW));
         map.animateCamera(CameraUpdateFactory.zoomTo(10));
-        map.addMarker(new MarkerOptions().position(NOW));
+        map.addMarker(new MarkerOptions().position(NOW));*/
 
         map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
 
@@ -295,7 +305,7 @@ public class SharingActivity extends Activity implements OnMapReadyCallback {
                 OutputStream os = socket.getOutputStream();
                 //msg = "Hello Server";
 
-                msg = Double.toString(location.getLatitude()) + "/" + Double.toString(location.getLongitude());
+                msg = Double.toString(location.getLatitude()) + "/" + Double.toString(location.getLongitude()) + "/";
 
                 //bytes = msg.getBytes("UTF-8");
                 bytes = msg.getBytes("UTF-8");
@@ -314,19 +324,22 @@ public class SharingActivity extends Activity implements OnMapReadyCallback {
 
 
                 String[] latlng = now_lat.split("/");
-                final LatLng loc = new LatLng(Double.parseDouble(latlng[0]), Double.parseDouble(latlng[1]));
+                for (int i=0; i<latlng.length; i++) {
+                    final LatLng loc = new LatLng(Double.parseDouble(latlng[i]), Double.parseDouble(latlng[i+1]));
 
-                // loc를 message로 핸들러에 전달하기 (서버에 있는 위치 받아서 마커찍기)
-                Message msg1 = new Message();
-                msg1.what = 1;
-                msg1.obj = loc;
-                handler.sendMessage(msg1);
+                    // loc를 message로 핸들러에 전달하기 (서버에 있는 위치 받아서 마커찍기)
+                    Message msg1 = new Message();
+                    msg1.what = 1;
+                    msg1.obj = loc;
+                    handler.sendMessage(msg1);
+                }
+
 
                 os.close();
                 is.close();
 
             } catch (Exception e) {
-                Log.d("결과 ", "서버 연결 실패");
+                //Log.d("결과 ", "서버 연결 실패");
             }
 
             if(!socket.isClosed()) {
